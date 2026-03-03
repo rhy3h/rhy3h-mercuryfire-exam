@@ -117,7 +117,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed, reactive, watch } from 'vue'
+import { computed, reactive, watch } from 'vue'
 import {
   DialogRoot,
   DialogPortal,
@@ -127,7 +127,7 @@ import {
   DialogClose,
 } from 'reka-ui'
 import { X, ChevronDown } from 'lucide-vue-next'
-import { accountsApi } from '@/api/accounts'
+import { useAccounts } from '@/composables/useAccounts'
 import type { AccountFormDto, Account } from '@/api/types'
 
 const props = defineProps<{
@@ -140,7 +140,7 @@ const emit = defineEmits<{
   success: []
 }>()
 
-const loading = ref(false)
+const { createAccount, updateAccount, loading } = useAccounts()
 
 const form = reactive<AccountFormDto>({
   name: '',
@@ -177,20 +177,17 @@ const isFormValid = computed(() => {
 async function handleSubmit() {
   if (!isFormValid.value || loading.value) return
 
-  loading.value = true
   try {
     if (isEdit.value && props.initialData) {
-      await accountsApi.update(props.initialData.id, { ...form })
+      await updateAccount(props.initialData.id, { ...form })
     } else {
-      await accountsApi.create({ ...form })
+      await createAccount({ ...form })
     }
     emit('success')
     emit('update:open', false)
   } catch (error) {
     console.error('Operation failed:', error)
     alert(isEdit.value ? '編輯帳號失敗' : '新增帳號失敗')
-  } finally {
-    loading.value = false
   }
 }
 </script>

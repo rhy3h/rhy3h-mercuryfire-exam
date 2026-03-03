@@ -18,14 +18,18 @@
       <StatsCards :stats="computedStats" />
 
       <!-- Account Grid -->
-      <AccountGrid :accounts="filteredAccounts" @edit="handleEdit" @delete="handleDelete" />
+      <div v-if="loading" class="flex justify-center py-12">
+        <span class="text-gray-500 text-lg">載入中...</span>
+      </div>
+      <AccountGrid v-else :accounts="filteredAccounts" @edit="handleEdit" @delete="handleDelete" />
     </main>
   </div>
 </template>
 
 <script setup lang="ts">
-import { ref, computed } from 'vue'
+import { ref, computed, onMounted, watch } from 'vue'
 import { useRouter } from 'vue-router'
+import { useAccounts } from '@/composables/useAccounts'
 
 import DashboardHeader from '@/components/dashboard/DashboardHeader.vue'
 import SearchBar from '@/components/dashboard/SearchBar.vue'
@@ -39,53 +43,19 @@ const searchQuery = ref('')
 const isModalOpen = ref(false)
 const editingAccount = ref<Account | null>(null)
 
-// ── Mock data (將來替換成 API 回傳) ──────────────────────────────────────────
-const accounts = ref<Account[]>([
-  {
-    id: '1',
-    name: '張小明',
-    email: 'ming.chang@example.com',
-    roleLevel: 'ADMIN',
-    status: 'ON',
-    createdAt: '2024-01-15',
-  },
-  {
-    id: '2',
-    name: '李美蘭',
-    email: 'meili.li@example.com',
-    roleLevel: 'USER',
-    status: 'ON',
-    createdAt: '2024-02-20',
-  },
-  {
-    id: '3',
-    name: '王大寶',
-    email: 'dabao.wang@example.com',
-    roleLevel: 'EDITOR',
-    status: 'OFF',
-    createdAt: '2024-03-10',
-  },
-  {
-    id: '4',
-    name: '乃乃',
-    email: 'rhy3htw@gmail.com',
-    roleLevel: 'ADMIN',
-    status: 'OFF',
-    createdAt: '2026-03-03',
-  },
-])
+const { accounts, loading, fetchAll, deleteAccount } = useAccounts()
+
+onMounted(() => {
+  fetchAll()
+})
+
+watch(searchQuery, (val) => {
+  const q = val.trim()
+  fetchAll({ name: q, email: q })
+})
 
 // ── Computed ──────────────────────────────────────────────────────────────────
-const filteredAccounts = computed(() => {
-  const q = searchQuery.value.trim().toLowerCase()
-  if (!q) return accounts.value
-  return accounts.value.filter(
-    (a: Account) =>
-      a.name.toLowerCase().includes(q) ||
-      a.email.toLowerCase().includes(q) ||
-      a.roleLevel.toLowerCase().includes(q),
-  )
-})
+const filteredAccounts = computed(() => accounts.value)
 
 const computedStats = computed(() => [
   { label: '總帳號數', value: accounts.value.length },
@@ -101,16 +71,18 @@ function handleAddAccount() {
 
 function handleSuccess() {
   console.log('Operation successful, refreshing list...')
-  // TODO: refresh accounts from API
+  fetchAll()
 }
 
 function handleEdit(account: Account) {
-  editingAccount.value = account
+  editingAccount.value = { ...account }
   isModalOpen.value = true
 }
 
-function handleDelete(account: Account) {
-  // TODO: call delete API then refresh
-  console.log('刪除', account)
+async function handleDelete(account: Account) {
+  if (confirm(`確定要刪除帳號 ${account.name} 嗎？`)) {
+    await deleteAccount(account.id)
+    fetchAll()
+  }
 }
 </script>
