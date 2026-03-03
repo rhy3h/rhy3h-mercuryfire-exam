@@ -31,7 +31,7 @@
       </div>
       <div class="flex items-center gap-2">
         <CalendarDays :size="14" class="text-gray-400 flex-shrink-0" />
-        <span>{{ account.createdAt }}</span>
+        <span>{{ formattedDate }}</span>
       </div>
     </div>
 
@@ -58,6 +58,7 @@
 </template>
 
 <script setup lang="ts">
+import { computed } from 'vue'
 import { UserRound, Mail, ShieldCheck, CalendarDays, Pencil, Trash2 } from 'lucide-vue-next'
 import type { RoleLevel, Account } from '@/api/types'
 
@@ -68,6 +69,17 @@ const roleLabelMap: Record<RoleLevel, string> = {
   CLIENT: '客戶',
 }
 
-defineProps<{ account: Account }>()
+const props = defineProps<{ account: Account }>()
 defineEmits<{ edit: [account: Account]; delete: [account: Account] }>()
+
+const formattedDate = computed(() => {
+  if (!props.account.createdAt) return ''
+  return new Date(props.account.createdAt)
+    .toLocaleDateString('zh-TW', {
+      year: 'numeric',
+      month: '2-digit',
+      day: '2-digit',
+    })
+    .replace(/\//g, '-')
+})
 </script>
