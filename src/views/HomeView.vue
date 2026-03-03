@@ -1,9 +1,7 @@
-<script setup lang="ts">
-import TheWelcome from '../components/TheWelcome.vue'
-</script>
-
 <template>
-  <main>
-    <TheWelcome />
-  </main>
+  <LoginForm />
 </template>
+
+<script setup lang="ts">
+import LoginForm from '@/components/form/LoginForm.vue'
+</script>
