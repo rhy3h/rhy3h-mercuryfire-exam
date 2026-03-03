@@ -16,8 +16,8 @@
       </div>
 
       <!-- Title -->
-      <h1 class="text-center text-xl font-bold text-gray-800 mb-1">歡迎回來</h1>
-      <p class="text-center text-sm text-gray-400 mb-7">請登入您的帳號以電子郵件</p>
+      <h1 class="text-center text-base text-gray-800 mb-1">歡迎回來</h1>
+      <p class="text-center text-base text-gray-800 mb-7">請登入您的帳號以電子郵件</p>
 
       <!-- Email Field -->
       <div class="mb-5">
@@ -34,7 +34,7 @@
             type="email"
             placeholder="your@email.com"
             autocomplete="email"
-            class="w-full pl-9 pr-4 py-2.5 border rounded-lg text-sm outline-none transition-all focus:ring-2"
+            class="w-full pl-9 pr-4 py-3 border rounded-lg text-sm outline-none transition-all focus:ring-2"
             :class="
               emailError
                 ? 'border-red-400 focus:ring-red-200'
@@ -60,7 +60,7 @@
             type="password"
             placeholder="••••••••"
             autocomplete="current-password"
-            class="w-full pl-9 pr-4 py-2.5 border rounded-lg text-sm outline-none transition-all focus:ring-2"
+            class="w-full pl-9 pr-4 py-3 border rounded-lg text-sm outline-none transition-all focus:ring-2"
             :class="
               passwordError
                 ? 'border-red-400 focus:ring-red-200'
@@ -89,7 +89,7 @@
       <button
         id="login-button"
         type="button"
-        class="w-full flex items-center justify-center gap-2 py-3 rounded-xl text-white font-semibold text-sm transition-all hover:opacity-90 active:scale-95"
+        class="w-full flex items-center justify-center gap-2 py-3 rounded-lg text-white text-base transition-all hover:opacity-90 active:scale-95"
         style="background: #4f46e5"
         @click="handleSubmit"
       >
@@ -100,7 +100,7 @@
       <!-- Success message -->
       <div
         v-if="loginSuccess"
-        class="mt-4 flex items-start gap-2 rounded-xl px-4 py-3 text-sm"
+        class="mt-4 flex items-start gap-2 rounded-lg px-4 py-3 text-sm"
         style="background: #eef2ff; color: #4f46e5; border: 1px solid #c7d2fe"
       >
         <span>✅</span>
@@ -110,7 +110,7 @@
       <!-- Hint Box -->
       <div
         v-else
-        class="mt-4 flex items-start gap-2 rounded-xl px-4 py-3 text-sm"
+        class="mt-4 flex items-center justify-center gap-2 rounded-xl px-4 py-4 text-base"
         style="background: #eef2ff; color: #4f46e5; border: 1px solid #c7d2fe"
       >
         <span>💡</span>

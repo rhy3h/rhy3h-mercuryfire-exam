@@ -8,7 +8,7 @@
       >
         <UserRound class="text-white" :size="20" />
       </div>
-      <div class="flex items-center gap-2 flex-wrap">
+      <div class="flex flex-col items-start gap-2 flex-wrap">
         <span class="font-semibold text-gray-800">{{ account.name }}</span>
         <span
           class="text-xs font-medium px-2 py-0.5 rounded-full"
@@ -39,7 +39,7 @@
     <div class="flex gap-2 pt-1 border-t border-gray-100">
       <button
         type="button"
-        class="flex-1 flex items-center justify-center gap-1.5 py-1.5 rounded-lg border border-gray-200 text-sm text-gray-600 hover:bg-gray-50 transition-colors"
+        class="flex-1 flex items-center justify-center gap-1.5 py-1.5 rounded-lg border border-gray-200 text-sm text-indigo-400 bg-indigo-100 hover:bg-gray-50 transition-colors"
         @click="$emit('edit', account)"
       >
         <Pencil :size="13" />
@@ -47,7 +47,7 @@
       </button>
       <button
         type="button"
-        class="flex-1 flex items-center justify-center gap-1.5 py-1.5 rounded-lg border border-red-200 text-sm text-red-500 hover:bg-red-50 transition-colors"
+        class="flex-1 flex items-center justify-center gap-1.5 py-1.5 rounded-lg border border-red-200 text-sm text-red-500 bg-red-100 hover:bg-red-50 transition-colors"
         @click="$emit('delete', account)"
       >
         <Trash2 :size="13" />

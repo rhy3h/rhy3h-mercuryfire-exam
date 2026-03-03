@@ -10,7 +10,7 @@
         :value="modelValue"
         type="text"
         placeholder="搜尋帳號（姓名、郵件、角色）..."
-        class="w-full pl-9 pr-4 py-2 border border-gray-200 rounded-lg text-sm outline-none focus:ring-2 focus:ring-indigo-200 focus:border-indigo-400 transition-all bg-white"
+        class="w-full pl-9 pr-4 py-2 border border-gray-200 rounded-lg text-lg outline-none focus:ring-2 focus:ring-indigo-200 focus:border-indigo-400 transition-all bg-white"
         @input="$emit('update:modelValue', ($event.target as HTMLInputElement).value)"
       />
     </div>
@@ -19,7 +19,7 @@
     <button
       id="add-account-button"
       type="button"
-      class="flex items-center gap-1.5 px-4 py-2 rounded-lg text-white text-sm font-semibold transition-all hover:opacity-90 active:scale-95 whitespace-nowrap"
+      class="flex items-center gap-1.5 px-4 py-2 rounded-lg text-white text-lg font-semibold transition-all hover:opacity-90 active:scale-95 whitespace-nowrap"
       style="background: #4f46e5"
       @click="$emit('addAccount')"
     >
