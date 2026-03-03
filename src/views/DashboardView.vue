@@ -1,10 +1,10 @@
 <template>
   <div class="min-h-screen flex flex-col" style="background: #f4f5fb">
     <!-- Header -->
-    <DashboardHeader @logout="router.push('/')" />
+    <DashboardHeader @logout="handleLogout" />
 
     <!-- Main content -->
-    <main class="flex-1 px-6 py-6 max-w-7xl mx-auto w-full flex flex-col gap-5">
+    <main class="flex-1 px-4 sm:px-6 py-6 max-w-7xl mx-auto w-full flex flex-col gap-5">
       <!-- Search + Add -->
       <SearchBar v-model="searchQuery" @add-account="handleAddAccount" />
 
@@ -84,5 +84,10 @@ async function handleDelete(account: Account) {
     await deleteAccount(account.id)
     fetchAll()
   }
+}
+
+async function handleLogout() {
+  localStorage.removeItem('isLoggedIn')
+  router.push('/')
 }
 </script>

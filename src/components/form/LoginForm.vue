@@ -167,6 +167,7 @@ function handleSubmit() {
 
   if (valid) {
     loginSuccess.value = true
+    localStorage.setItem('isLoggedIn', 'true')
     router.push({ name: 'dashboard' })
   }
 }

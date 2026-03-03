@@ -1,5 +1,7 @@
 <template>
-  <header class="bg-white border-b border-gray-200 px-6 py-3 flex items-center justify-between">
+  <header
+    class="bg-white border-b border-gray-200 px-4 sm:px-6 py-3 flex items-center justify-between"
+  >
     <!-- Left: Logo + Title -->
     <div class="flex items-center gap-3">
       <div
