@@ -27,8 +27,9 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed, onMounted, watch } from 'vue'
+import { ref, computed, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
+import { refDebounced } from '@vueuse/core'
 import { useAccounts } from '@/composables/useAccounts'
 
 import DashboardHeader from '@/components/dashboard/DashboardHeader.vue'
@@ -36,31 +37,53 @@ import SearchBar from '@/components/dashboard/SearchBar.vue'
 import StatsCards from '@/components/dashboard/StatsCards.vue'
 import AccountGrid from '@/components/dashboard/AccountGrid.vue'
 import AccountFormModal from '@/components/dashboard/AccountFormModal.vue'
-import type { Account } from '@/api/types'
+import type { Account, RoleLevel } from '@/api/types'
 
 const router = useRouter()
 const searchQuery = ref('')
+const searchQueryDebounced = refDebounced(searchQuery, 400)
 const isModalOpen = ref(false)
 const editingAccount = ref<Account | null>(null)
 
 const { accounts, loading, fetchAll, deleteAccount } = useAccounts()
 
+const roleLabelMap: Record<RoleLevel, string> = {
+  ADMIN: '管理員',
+  EDITOR: '編輯',
+  USER: '用戶',
+  CLIENT: '客戶',
+}
+
 onMounted(() => {
   fetchAll()
 })
 
-watch(searchQuery, (val) => {
-  const q = val.trim()
-  fetchAll({ name: q, email: q })
+// ── Computed ──────────────────────────────────────────────────────────────────
+const filteredAccounts = computed(() => {
+  const q = searchQueryDebounced.value.trim().toLowerCase()
+  if (!q) return accounts.value
+
+  return accounts.value.filter((a) => {
+    const roleName = roleLabelMap[a.roleLevel] || ''
+    return (
+      a.name.toLowerCase().includes(q) ||
+      a.email.toLowerCase().includes(q) ||
+      roleName.toLowerCase().includes(q) ||
+      a.roleLevel.toLowerCase().includes(q)
+    )
+  })
 })
 
-// ── Computed ──────────────────────────────────────────────────────────────────
-const filteredAccounts = computed(() => accounts.value)
-
 const computedStats = computed(() => [
-  { label: '總帳號數', value: accounts.value.length },
-  { label: '啟用中', value: accounts.value.filter((a: Account) => a.status === 'ON').length },
-  { label: '已停用', value: accounts.value.filter((a: Account) => a.status === 'OFF').length },
+  { label: '顯示帳號', value: filteredAccounts.value.length },
+  {
+    label: '啟用中',
+    value: filteredAccounts.value.filter((a: Account) => a.status === 'ON').length,
+  },
+  {
+    label: '已停用',
+    value: filteredAccounts.value.filter((a: Account) => a.status === 'OFF').length,
+  },
 ])
 
 // ── Handlers (placeholder，之後串 API) ────────────────────────────────────────
