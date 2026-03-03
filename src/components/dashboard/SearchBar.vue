@@ -1,5 +1,5 @@
 <template>
-  <div class="flex items-center gap-3">
+  <div class="flex flex-col sm:flex-row sm:items-center gap-3">
     <!-- Search -->
     <div class="relative flex-1">
       <span class="absolute inset-y-0 left-3 flex items-center text-gray-400 pointer-events-none">
