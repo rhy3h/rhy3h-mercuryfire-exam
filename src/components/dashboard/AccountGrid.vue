@@ -16,8 +16,9 @@
 
 <script setup lang="ts">
 import { UserRound } from 'lucide-vue-next'
-import AccountCard, { type AccountItem } from './AccountCard.vue'
+import AccountCard from './AccountCard.vue'
+import type { Account } from '@/api/types'
 
-defineProps<{ accounts: AccountItem[] }>()
-defineEmits<{ edit: [account: AccountItem]; delete: [account: AccountItem] }>()
+defineProps<{ accounts: Account[] }>()
+defineEmits<{ edit: [account: Account]; delete: [account: Account] }>()
 </script>
