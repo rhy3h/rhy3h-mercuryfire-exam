@@ -59,16 +59,7 @@
 
 <script setup lang="ts">
 import { UserRound, Mail, ShieldCheck, CalendarDays, Pencil, Trash2 } from 'lucide-vue-next'
-import type { RoleLevel, AccountStatus } from '@/api/types'
-
-export interface AccountItem {
-  id: string
-  name: string
-  email: string
-  roleLevel: RoleLevel
-  status: AccountStatus
-  createdAt: string
-}
+import type { RoleLevel, Account } from '@/api/types'
 
 const roleLabelMap: Record<RoleLevel, string> = {
   ADMIN: '管理員',
@@ -77,6 +68,6 @@ const roleLabelMap: Record<RoleLevel, string> = {
   CLIENT: '客戶',
 }
 
-defineProps<{ account: AccountItem }>()
-defineEmits<{ edit: [account: AccountItem]; delete: [account: AccountItem] }>()
+defineProps<{ account: Account }>()
+defineEmits<{ edit: [account: Account]; delete: [account: Account] }>()
 </script>

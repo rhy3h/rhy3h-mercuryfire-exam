@@ -8,6 +8,12 @@
       <!-- Search + Add -->
       <SearchBar v-model="searchQuery" @add-account="handleAddAccount" />
 
+      <AccountFormModal
+        v-model:open="isModalOpen"
+        :initial-data="editingAccount"
+        @success="handleSuccess"
+      />
+
       <!-- Stats -->
       <StatsCards :stats="computedStats" />
 
@@ -25,13 +31,16 @@ import DashboardHeader from '@/components/dashboard/DashboardHeader.vue'
 import SearchBar from '@/components/dashboard/SearchBar.vue'
 import StatsCards from '@/components/dashboard/StatsCards.vue'
 import AccountGrid from '@/components/dashboard/AccountGrid.vue'
-import type { AccountItem } from '@/components/dashboard/AccountCard.vue'
+import AccountFormModal from '@/components/dashboard/AccountFormModal.vue'
+import type { Account } from '@/api/types'
 
 const router = useRouter()
 const searchQuery = ref('')
+const isModalOpen = ref(false)
+const editingAccount = ref<Account | null>(null)
 
 // ── Mock data (將來替換成 API 回傳) ──────────────────────────────────────────
-const accounts = ref<AccountItem[]>([
+const accounts = ref<Account[]>([
   {
     id: '1',
     name: '張小明',
@@ -71,7 +80,7 @@ const filteredAccounts = computed(() => {
   const q = searchQuery.value.trim().toLowerCase()
   if (!q) return accounts.value
   return accounts.value.filter(
-    (a) =>
+    (a: Account) =>
       a.name.toLowerCase().includes(q) ||
       a.email.toLowerCase().includes(q) ||
       a.roleLevel.toLowerCase().includes(q),
@@ -80,22 +89,27 @@ const filteredAccounts = computed(() => {
 
 const computedStats = computed(() => [
   { label: '總帳號數', value: accounts.value.length },
-  { label: '啟用中', value: accounts.value.filter((a) => a.status === 'ON').length },
-  { label: '已停用', value: accounts.value.filter((a) => a.status === 'OFF').length },
+  { label: '啟用中', value: accounts.value.filter((a: Account) => a.status === 'ON').length },
+  { label: '已停用', value: accounts.value.filter((a: Account) => a.status === 'OFF').length },
 ])
 
 // ── Handlers (placeholder，之後串 API) ────────────────────────────────────────
 function handleAddAccount() {
-  // TODO: open create dialog / navigate to create page
-  console.log('新增帳號')
+  editingAccount.value = null
+  isModalOpen.value = true
 }
 
-function handleEdit(account: AccountItem) {
-  // TODO: open edit dialog
-  console.log('編輯', account)
+function handleSuccess() {
+  console.log('Operation successful, refreshing list...')
+  // TODO: refresh accounts from API
 }
 
-function handleDelete(account: AccountItem) {
+function handleEdit(account: Account) {
+  editingAccount.value = account
+  isModalOpen.value = true
+}
+
+function handleDelete(account: Account) {
   // TODO: call delete API then refresh
   console.log('刪除', account)
 }
