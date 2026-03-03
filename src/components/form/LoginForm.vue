@@ -128,7 +128,10 @@
 
 <script setup lang="ts">
 import { ref } from 'vue'
+import { useRouter } from 'vue-router'
 import { Mail, Lock, LogIn } from 'lucide-vue-next'
+
+const router = useRouter()
 
 const email = ref('')
 const password = ref('')
@@ -164,6 +167,7 @@ function handleSubmit() {
 
   if (valid) {
     loginSuccess.value = true
+    router.push({ name: 'dashboard' })
   }
 }
 </script>
